@@ -13,7 +13,7 @@ import uk.co.sentinelweb.wtestapp.R
 import uk.co.sentinelweb.wtestapp.domain.Cake
 import kotlinx.android.synthetic.main.item_list_content.view.*
 
-// FIXME this should be a top level class for readability
+
 class CakeListRecyclerViewAdapter(
         initialValues: List<Cake>
     ) : RecyclerView.Adapter<CakeListRecyclerViewAdapter.ViewHolder>() {
@@ -43,7 +43,7 @@ class CakeListRecyclerViewAdapter(
             val item = items[position]
             holder.titleView.text = item.title
             Picasso.get().load(item.image).into(holder.imageView)
-            // FIXME
+            // FIXME probably should use recycler view item decoration .. out of time
             ObjectAnimator.ofFloat(
                 holder.rootView, "translationX", -200f, 0f
             ).start()
