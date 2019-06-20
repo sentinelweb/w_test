@@ -48,7 +48,7 @@ class CakeListFragment : Fragment(), CakeListContract.View {
         val inflate = inflater.inflate(R.layout.cake_list_fragment, container, false)
         cakeListRecycler = inflate.findViewById(R.id.cake_list_recycler)
         cakeListSwipe = inflate.findViewById(R.id.cake_list_swipe)
-        cakeListRoot = inflate.findViewById(R.id.cakelist)
+        cakeListRoot = inflate.findViewById(R.id.cake_list)
         return inflate
     }
 
