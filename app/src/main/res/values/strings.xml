@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">WTestApp</string>
+    <string name="title_item_detail">Item Detail</string>
+    <string name="title_cake_list">Cake list</string>
+    <string name="accessability_cake_image">cake image</string>
+    <string name="error_loading">Error loading data</string>
+    <string name="action_retry">Retry</string>
+</resources>
