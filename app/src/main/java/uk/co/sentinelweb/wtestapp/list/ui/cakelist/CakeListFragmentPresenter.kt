@@ -1,61 +1,66 @@
 package uk.co.sentinelweb.wtestapp.list.ui.cakelist
 
-import android.util.Log
+import androidx.annotation.VisibleForTesting
 import kotlinx.coroutines.*
+import uk.co.sentinelweb.wtestapp.LogWrapper
 import uk.co.sentinelweb.wtestapp.domain.Cake
 import uk.co.sentinelweb.wtestapp.net.service.CakeListService
 import java.io.IOException
 
 class CakeListFragmentPresenter constructor(
     private val view: CakeListContract.View,
-    private val service: CakeListService
-):CakeListContract.Presenter {
+    private val service: CakeListService,
+    private val log: LogWrapper
+) : CakeListContract.Presenter {
 
     companion object {
         private val LOG_TAG = CakeListFragmentPresenter::class.java.simpleName
     }
 
-    private lateinit var loadJob:Job
+    private lateinit var loadJob: Job
 
     // todo : instead of just executing here i would normally make an interactor class to handle the api execution
-    override fun loadData(forceRefresh:Boolean) {
+    override fun loadData(forceRefresh: Boolean) {
         if (view.getCakeListViewModel().cakeList.isEmpty() || forceRefresh) {
             view.showRefreshing(true)
             loadJob = CoroutineScope(Dispatchers.IO).launch {
                 try {
-                    Log.d(LOG_TAG, "Loading data ...")
+                    log.d(LOG_TAG, "Loading data ...", null)
                     val result = service.listCakes()
 
                     updateAfterLoadSuccess(result)
                 } catch (ioException: IOException) {
-                    updateAfterLoadFail()
-                    Log.d(LOG_TAG, "Error loading data", ioException)
+                    withContext(Dispatchers.Main) {updateAfterLoadFail()}
+                    log.d(LOG_TAG, "Error loading data", ioException)
                 }
-                view.showRefreshing(false)
+
             }
         }
     }
 
+    /**
+     * cancels the load job if currently active
+     */
     override fun releaseJob() {
-        if (::loadJob.isInitialized && loadJob.isActive){
+        if (::loadJob.isInitialized && loadJob.isActive) {
             loadJob.cancel()
         }
     }
 
-    private suspend fun updateAfterLoadSuccess(result: List<Cake>) {
+    @VisibleForTesting suspend fun updateAfterLoadSuccess(result: List<Cake>) =
         withContext(Dispatchers.Main) {
             view.getCakeListViewModel().cakeList = result.distinct().sortedBy { it.title }
             view.updateDisplay()
             view.showError(false)
+            view.showRefreshing(false)
         }
-    }
 
-    private suspend fun updateAfterLoadFail() {
+    @VisibleForTesting suspend fun updateAfterLoadFail() =
         withContext(Dispatchers.Main) {
             view.getCakeListViewModel().cakeList = emptyList()
             view.updateDisplay()
             view.showError(true)
+            view.showRefreshing(false)
         }
-    }
 
 }

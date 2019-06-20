@@ -1,5 +1,6 @@
 package uk.co.sentinelweb.wtestapp.list.ui.cakelist
 
+import uk.co.sentinelweb.wtestapp.LogWrapper
 import uk.co.sentinelweb.wtestapp.net.client.RetrofitFactory
 
 /**
@@ -12,7 +13,8 @@ class CakeListComponent {
             val retrofitFactory = RetrofitFactory()
             return CakeListFragmentPresenter(
                 view,
-                retrofitFactory.createCakeListService(retrofitFactory.createClient())
+                retrofitFactory.createCakeListService(retrofitFactory.createClient()),
+                LogWrapper()
             )
         }
     }
