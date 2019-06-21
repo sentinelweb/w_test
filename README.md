@@ -3,6 +3,7 @@
 * uses kotlin coroutines for concurrency (need restructuring for proper testing)
 * retrofit for networking
 * MVP pattern (V/P Separated by Contract interface)
+* ViewModel handles configuration changes
 
 Some Improvements:
 * Restructure co-routine's execution in Presenterfor better testing
